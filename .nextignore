@@ -1,0 +1,6 @@
+pages/**/[A-Z]*
+pages/**/[A-Z]*/*.*
+pages/**/actions.ts
+pages/**/actionTypes.ts
+pages/**/reducer.ts
+pages/**/saga.ts
