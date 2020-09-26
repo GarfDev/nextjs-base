@@ -1,13 +1,16 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useStore } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import { wrapper } from "../store";
 import { PersistGate } from "redux-persist/integration/react";
 import { initTheme } from "store/core/theming";
+import BaseStyle, { currentThemeSelector } from "global/theming";
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const store = useStore((state) => state);
+  const currentTheme = useSelector(currentThemeSelector);
 
   useEffect(() => {
     dispatch(initTheme());
@@ -15,7 +18,10 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <PersistGate persistor={store.__persistor} loading={<div>Loading...</div>}>
-      <Component {...pageProps} />
+      <ThemeProvider theme={currentTheme}>
+        <Component {...pageProps} />
+        <BaseStyle />
+      </ThemeProvider>
     </PersistGate>
   );
 }

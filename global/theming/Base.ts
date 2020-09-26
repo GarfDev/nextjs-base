@@ -14,9 +14,6 @@ const BaseStyle = createGlobalStyle`
     background: ${({ theme }) => theme.backgroundColor};
     color: ${({ theme }) => theme.color};
     border-color: ${({ theme }) => theme.borderColor};
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
     margin: 0;
     padding: 0;
     font-family: 'Source Sans Pro', sans-serif;
