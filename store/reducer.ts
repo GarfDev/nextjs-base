@@ -1,28 +1,16 @@
 import { combineReducers } from "redux";
 import { HYDRATE } from "next-redux-wrapper";
 // Import reducers
+import wrapperReducer from "./core/wrapper";
 import cartReducer from "./core/cart";
 import sessionReducer from "./core/session";
-
-const reducer = (state = { app: "init", page: "init" }, action: any) => {
-  switch (action.type) {
-    case HYDRATE:
-      if (action.payload.app === "init") delete action.payload.app;
-      if (action.payload.page === "init") delete action.payload.page;
-      return state;
-    case "APP":
-      return { ...state, app: action.payload };
-    case "PAGE":
-      return { ...state, page: action.payload };
-    default:
-      return state;
-  }
-};
+import themeReducer from "./core/theming";
 
 const rootReducer = combineReducers({
-  wrapper: reducer,
+  wrapper: wrapperReducer,
   cart: cartReducer,
   session: sessionReducer,
+  theming: themeReducer,
 });
 
 export default rootReducer;

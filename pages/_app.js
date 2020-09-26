@@ -1,11 +1,17 @@
-import { Provider } from "react-redux";
-import { wrapper } from "../store";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useStore } from "react-redux";
+import { wrapper } from "../store";
 import { PersistGate } from "redux-persist/integration/react";
-import "../styles/globals.css";
+import { initTheme } from "store/core/theming";
 
 function MyApp({ Component, pageProps }) {
+  const dispatch = useDispatch();
   const store = useStore((state) => state);
+
+  useEffect(() => {
+    dispatch(initTheme());
+  }, []);
 
   return (
     <PersistGate persistor={store.__persistor} loading={<div>Loading...</div>}>
