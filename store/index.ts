@@ -1,6 +1,11 @@
-import { createWrapper } from "next-redux-wrapper";
 import { applyMiddleware, createStore } from "redux";
+import { createWrapper } from "next-redux-wrapper";
+import createSagaMiddleware from "redux-saga";
+
 import rootReducer from "./reducer";
+import rootSaga from "./saga";
+
+const sagaMiddleware = createSagaMiddleware();
 
 const bindMiddleware = (middleware: any) => {
   if (process.env.NODE_ENV !== "production") {
@@ -13,27 +18,29 @@ const bindMiddleware = (middleware: any) => {
 const makeStore = ({ isServer }: any) => {
   if (isServer) {
     //If it's on server side, create a store
-    return createStore(rootReducer, bindMiddleware([]));
+    return createStore(rootReducer, bindMiddleware([sagaMiddleware]));
   } else {
     //If it's on client side, create a store which will persist
-    const {
-      persistStore,
-      persistReducer,
-      autoRehydrate,
-    } = require("redux-persist");
+    const { persistStore, persistReducer } = require("redux-persist");
     const storage = require("redux-persist/lib/storage").default;
 
     const persistConfig = {
       key: "nextjs",
-      whitelist: ["cart", "session"], // only counter will be persisted, add other reducers if needed
+      whitelist: ["cart"], // only counter will be persisted, add other reducers if needed
       storage, // if needed, use a safer storage
     };
 
     const persistedReducer = persistReducer(persistConfig, rootReducer); // Create a new reducer with our existing reducer
 
-    const store = createStore(persistedReducer, {}, bindMiddleware([])) as any; // Creating the store again
+    const store = createStore(
+      persistedReducer,
+      {},
+      bindMiddleware([sagaMiddleware])
+    ) as any; // Creating the store again
 
     store.__persistor = persistStore(store); // This creates a persistor object & push that persisted object to .__persistor, so that we can avail the persistability feature
+
+    sagaMiddleware.run(rootSaga);
 
     return store;
   }

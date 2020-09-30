@@ -1,7 +1,13 @@
 import ActionTypes from "./actionTypes";
 import { Cart, CartActions } from "./types";
 
-export const cartInitialState: Cart = {};
+export const cartInitialState: Cart = {
+  itemCount: 0,
+  currency: "USD",
+  items: {},
+  itemSubTotalPrice: 0,
+  originalTotalPrice: 0,
+};
 
 const cartReducer = (state = cartInitialState, action: CartActions) => {
   switch (action.type) {
@@ -13,14 +19,20 @@ const cartReducer = (state = cartInitialState, action: CartActions) => {
     //
     case ActionTypes.UPDATE_ITEM: {
       const { id, newItem } = action.payload;
-      return { ...state, [id]: newItem };
+      return {
+        ...state,
+        items: {
+          ...state.items,
+          [id]: newItem,
+        },
+      };
     }
     //
     case ActionTypes.REMOVE_ITEM: {
       const { id } = action.payload;
-      const newState = state;
-      delete newState[id];
-      return newState;
+      const newCartItems = state.items;
+      delete newCartItems[id];
+      return { ...state, items: newCartItems };
     }
     //
     case ActionTypes.RESET_CART: {

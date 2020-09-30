@@ -13,5 +13,12 @@ export interface CartItem {
 }
 
 export interface Cart {
-  [id: string]: CartItem;
+  id?: string;
+  itemCount: number;
+  items: {
+    [id: string]: CartItem;
+  };
+  currency: string;
+  itemSubTotalPrice: number;
+  originalTotalPrice: number;
 }

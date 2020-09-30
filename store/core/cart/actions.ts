@@ -2,6 +2,10 @@ import { action } from "typesafe-actions";
 import ActionTypes from "./actionTypes";
 import { CartItem } from "./types";
 
+export const initCart = () => {
+  return action(ActionTypes.INIT_CART);
+};
+
 export const addItem = (item: CartItem) => {
   return action(ActionTypes.ADD_ITEM, { item });
 };
