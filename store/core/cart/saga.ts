@@ -3,17 +3,18 @@ import callApi from "global/services/api";
 import ActionTypes from "./actionTypes";
 import { CartResponse } from "./types";
 import { initCartSuccess } from "./actions";
+import { cartResponseToState } from "./adapters";
 
-function* initCart() {
+function* callInitCart() {
   const response: CartResponse = yield call(callApi, {
     method: "get",
-    route: "/api/v1/get_cart",
+    route: "/cart/get",
   });
   if (response.success) {
-    yield put(initCartSuccess(response.response));
+    yield put(initCartSuccess(cartResponseToState(response)));
   }
 }
 
 export default function* cartSaga() {
-  yield all([takeLatest(ActionTypes.INIT_CART, initCart)]);
+  yield all([takeLatest(ActionTypes.INIT_CART, callInitCart)]);
 }

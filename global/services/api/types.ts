@@ -1,4 +1,4 @@
-import { Method } from "axios";
+import { AxiosRequestConfig, Method } from "axios";
 
 export interface APIParams {
   method: Method;
@@ -8,8 +8,9 @@ export interface APIParams {
 }
 
 export interface ApiResponse {
+  header: any;
   success: boolean;
-  request: any;
+  request: AxiosRequestConfig;
   response: any;
   error?: Error;
 }

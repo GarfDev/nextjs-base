@@ -1,11 +1,9 @@
 import { applyMiddleware, createStore } from "redux";
 import { createWrapper } from "next-redux-wrapper";
-import createSagaMiddleware from "redux-saga";
+import createSagaMiddleware, { END } from "redux-saga";
 
 import rootReducer from "./reducer";
 import rootSaga from "./saga";
-
-const sagaMiddleware = createSagaMiddleware();
 
 const bindMiddleware = (middleware: any) => {
   if (process.env.NODE_ENV !== "production") {
@@ -16,6 +14,7 @@ const bindMiddleware = (middleware: any) => {
 };
 
 const makeStore = ({ isServer }: any) => {
+  const sagaMiddleware = createSagaMiddleware();
   if (isServer) {
     //If it's on server side, create a store
     return createStore(rootReducer, bindMiddleware([sagaMiddleware]));
@@ -40,7 +39,35 @@ const makeStore = ({ isServer }: any) => {
 
     store.__persistor = persistStore(store); // This creates a persistor object & push that persisted object to .__persistor, so that we can avail the persistability feature
 
-    sagaMiddleware.run(rootSaga);
+    store.runSaga = () => {
+      // Avoid running twice
+      if (store.saga) return;
+      store.saga = sagaMiddleware.run(rootSaga);
+    };
+
+    store.stopSaga = async () => {
+      // Avoid running twice
+      if (!store.saga) return;
+      store.dispatch(END);
+      await store.saga.done;
+      store.saga = null;
+    };
+
+    store.execSagaTasks = async (isServer: boolean, tasks: any) => {
+      // run saga
+      store.runSaga();
+      // dispatch saga tasks
+      tasks(store.dispatch);
+      // Stop running and wait for the tasks to be done
+      await store.stopSaga();
+      // Re-run on client side
+      if (!isServer) {
+        store.runSaga();
+      }
+    };
+
+    // Initial run
+    store.runSaga();
 
     return store;
   }

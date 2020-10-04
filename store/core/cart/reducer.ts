@@ -7,6 +7,8 @@ export const cartInitialState: Cart = {
   items: {},
   itemSubTotalPrice: 0,
   originalTotalPrice: 0,
+  createdAt: "",
+  updatedAt: "",
 };
 
 const cartReducer = (state = cartInitialState, action: CartActions) => {

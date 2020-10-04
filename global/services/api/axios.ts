@@ -1,8 +1,9 @@
 import _ from "lodash";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { APIParams } from "./types";
 import { defaultHeaders } from "./constants";
+import { responseAdapter } from "./adapters";
 
 const insertFormData = (formData: FormData, key: string, value: any) => {
   if (_.isPlainObject(value)) {
@@ -27,11 +28,7 @@ const transformFormData = (data: any) => {
 };
 
 const getDomain = () => {
-  if (process.env.NODE_ENV === "development") {
-    return process.env.REMOTE_URL || "";
-  }
-
-  return `https://${location.host}`;
+  return process.env.REMOTE_URL || "http://localhost:5000";
 };
 
 const DOMAIN = getDomain();
@@ -45,13 +42,14 @@ const callAxios = ({
   // Initial Config
   const config: AxiosRequestConfig = {
     method,
-    url: `${DOMAIN}/api${route}`,
+    url: `${DOMAIN}${route}`,
     headers: {
       ...defaultHeaders,
       ...headers,
     },
     params: method === "get" ? data : {},
     data: method === "post" ? data : undefined,
+    withCredentials: true,
     transformRequest: [
       (requestData, requestHeaders) => {
         if (requestHeaders["Content-Type"] === "multipart/form-data") {
@@ -63,7 +61,7 @@ const callAxios = ({
   };
   // Main return
   return axios(config)
-    .then((response: AxiosResponse) => response.data)
+    .then((response: AxiosResponse) => responseAdapter(response))
     .catch((error: AxiosError) => {
       const { response } = error;
       if (!response) throw error;

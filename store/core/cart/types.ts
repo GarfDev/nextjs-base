@@ -22,8 +22,24 @@ export interface Cart {
   currency: string;
   itemSubTotalPrice: number;
   originalTotalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RemoteCart {
+  _id: string;
+  currency: string;
+  discounts_applied: string[];
+  items: {
+    [id: string]: CartItem;
+  };
+  itemCount: number;
+  itemSubTotalPrice: number;
+  originalTotalPrice: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CartResponse extends ApiResponse {
-  response: Cart;
+  response: RemoteCart;
 }
