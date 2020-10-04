@@ -12,6 +12,11 @@ export const cartInitialState: Cart = {
 const cartReducer = (state = cartInitialState, action: CartActions) => {
   switch (action.type) {
     //
+    case ActionTypes.INIT_CART_SUCCESS: {
+      const { cart } = action.payload;
+      return cart;
+    }
+    //
     case ActionTypes.ADD_ITEM: {
       const { item } = action.payload;
       return { ...state, [item.id]: item };

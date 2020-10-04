@@ -1,9 +1,13 @@
 import { action } from "typesafe-actions";
 import ActionTypes from "./actionTypes";
-import { CartItem } from "./types";
+import { Cart, CartItem } from "./types";
 
 export const initCart = () => {
   return action(ActionTypes.INIT_CART);
+};
+
+export const initCartSuccess = (cart: Cart) => {
+  return action(ActionTypes.INIT_CART_SUCCESS, { cart });
 };
 
 export const addItem = (item: CartItem) => {

@@ -65,8 +65,9 @@ const callAxios = ({
   return axios(config)
     .then((response: AxiosResponse) => response.data)
     .catch((error: AxiosError) => {
-      // const { response } = error;
-      throw error;
+      const { response } = error;
+      if (!response) throw error;
+      return response;
     });
 };
 

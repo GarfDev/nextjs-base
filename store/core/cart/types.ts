@@ -1,3 +1,4 @@
+import { ApiResponse } from "global/services/api/types";
 import { ActionType } from "typesafe-actions";
 import * as actions from "./actions";
 
@@ -21,4 +22,8 @@ export interface Cart {
   currency: string;
   itemSubTotalPrice: number;
   originalTotalPrice: number;
+}
+
+export interface CartResponse extends ApiResponse {
+  response: Cart;
 }
