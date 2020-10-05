@@ -1,5 +1,5 @@
 import Head from "next/head";
 
 export default function Home() {
-  return <>Garfield was here</>;
+  return <div>Garfield was here</div>;
 }
