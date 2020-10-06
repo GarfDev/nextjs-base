@@ -1,12 +1,13 @@
 import React from "react";
+// Import resources
+import UserActions from "./UserActions";
 import { Container } from "./styles";
-import Cart from "./Cart";
 
 const NavigationBar: React.FC = () => {
   // Main return
   return (
     <Container>
-      <Cart />
+      <UserActions />
     </Container>
   );
 };

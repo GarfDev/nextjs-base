@@ -7,16 +7,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import { initTheme } from "store/core/theming";
 import { initCart } from "store/core/cart/actions";
 import BaseStyle, { currentThemeSelector } from "global/theming";
-// Import Fontawesome
-import "@fortawesome/fontawesome-svg-core/styles.css";
-import "@fortawesome/fontawesome-free/css/all.css";
-import "@fortawesome/fontawesome-free/js/fontawesome";
-import "@fortawesome/fontawesome-free/js/solid";
-import "@fortawesome/fontawesome-free/js/regular";
-import "@fortawesome/fontawesome-free/js/brands";
-import 'antd/dist/antd.css';
+// Import css
+import "antd/dist/antd.css";
 // Import Components
-import { NavigationBar } from "global/components";
+import { CartDrawer, NavigationBar } from "global/components";
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
@@ -34,6 +28,7 @@ function MyApp({ Component, pageProps }) {
         <NavigationBar {...pageProps} />
         <Component {...pageProps} />
         <BaseStyle />
+        <CartDrawer />
       </ThemeProvider>
     </PersistGate>
   );
